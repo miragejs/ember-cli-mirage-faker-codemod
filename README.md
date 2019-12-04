@@ -1,49 +1,43 @@
-This codemod is to help transition from importing `faker` through `ember-cli-mirage`, to instead import it directly from `faker`. Thanks to @caseywatts for doing most of the work.
+In the 1.0 release of Ember CLI Mirage, the Faker library was no longer automatically bundled. This codemod helps transition apps from importing `faker` through `ember-cli-mirage`, to instead importing it directly from `faker`.
+
+# Usage
+
+## 1. Install faker and ember-auto-import
+
+The easiest way to install Faker into your Ember app is to install the `faker` package directly from npm, and to use Ember Auto Import to make it easily available to your Ember app.
+
+```sh
+yarn add faker # or npm install faker --save-dev
+ember install ember-auto-import
+git add . && git commit -m "Adds faker, ember-auto-import"
+```
+
+## 2. Run the codemod
+
+You can now run this command in your terminal to apply the codemod to your application's files.
+
+```sh
+npx jscodeshift ./mirage -t https://raw.githubusercontent.com/miragejs/ember-cli-mirage-faker-codemod/master/transform.js
+```
+
+The codemod updates faker import statements found in the directory you specify. The previous example applied changes to the `./mirage` directory.
+
+You may also use faker elsewhere in your app, for example your tests directory:
+
+```sh
+npx jscodeshift ./tests -t https://raw.githubusercontent.com/miragejs/ember-cli-mirage-faker-codemod/master/transform.js
+```
+
+You can also apply it to your entire app and check `git diff` to double-check the work:
+
+```sh
+npx jscodeshift ./ -t https://raw.githubusercontent.com/miragejs/ember-cli-mirage-faker-codemod/master/transform.js
+```
+
+If you find any bugs or have any questions, please open an issue!
+
+# Background and credit 
 
 For more background on the situation, see [this github issue](https://github.com/samselikoff/ember-cli-mirage/issues/1037#issuecomment-411452618).
 
-
-## How To Remove The Faker Dependency
-
-### Install faker and ember-auto-import
-```
-yarn add faker
-git add . && git commit -m "adding faker package"
-ember install ember-auto-import
-git add . && git commit -m "installing ember-auto-import package"
-```
-
-### Run the codemod
-This example will run the codemod on all files in the `./tests` folder. Then you can selectively check in as many changes as you'd like to keep (try `git add -p`!).
-
-```
-npm install -g jscodeshift
-jscodeshift -t https://raw.githubusercontent.com/samselikoff/ember-cli-mirage-faker-codemod/update-transform/transform.js ./tests
-```
-
-You might also be using faker in your `mirage` directory, so you can run it there as well:
-
-```
-npm install -g jscodeshift
-jscodeshift -t https://raw.githubusercontent.com/samselikoff/ember-cli-mirage-faker-codemod/update-transform/transform.js ./mirage
-```
-
-- If you find additional edge cases, please clone this repo and contribute :D
-- Don't be afraid of codemods, check out Casey's [tutorial](https://caseywatts.com/2018/08/23/codemods.html)
-
-## How do codemods even?
-
-If this is your first codemod (it's mine!), [I wrote a lot about how I got up and running with codemods - check it out!](https://caseywatts.com/2018/08/23/codemods.html)
-
-
-## Development
-
-```
-git clone https://github.com/caseywatts/ember-cli-mirage-faker-codemod`
-cd ember-cli-mirage-faker-codemod`
-npm install
-npm test
-npm run codemod path/to/directories/or/files/you/want
-```
-
-Make sure to add test cases to the `__testfixtures__` (see the [tutorial](https://caseywatts.com/2018/08/23/codemods.html) for details).
+Thanks to @caseywatts for doing most of the work!
